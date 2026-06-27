@@ -119,7 +119,7 @@
   --sidebar-ring: #0da72f;
 }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: light) {
   :root:not(.light) {
     color-scheme: dark;
     --background: #0f1419;
