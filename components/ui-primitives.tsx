@@ -2,6 +2,7 @@
 
 import { ReactNode } from 'react'
 
+// Componente Tarjeta - Contenedor con estilo de tarjeta
 export function Card({ children, className = '' }: { children: ReactNode; className?: string }) {
   return (
     <div className={`bg-card rounded-xl border border-border/60 p-6 shadow-md hover:shadow-lg transition-all duration-300 ${className}`}>
@@ -10,20 +11,22 @@ export function Card({ children, className = '' }: { children: ReactNode; classN
   )
 }
 
+// Componente Insignia - Badge para mostrar estados
 export function Badge({ children, variant = 'default' }: { children: ReactNode; variant?: 'default' | 'success' | 'warning' | 'danger' }) {
-  const variants = {
+  const variantes = {
     default: 'bg-muted text-foreground',
     success: 'bg-green-100 text-green-800',
     warning: 'bg-amber-100 text-amber-800',
     danger: 'bg-red-100 text-red-800',
   }
   return (
-    <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${variants[variant]}`}>
+    <span className={`inline-block px-3 py-1 rounded-full text-xs font-medium ${variantes[variant]}`}>
       {children}
     </span>
   )
 }
 
+// Componente Botón - Botón reutilizable con variantes
 export function Button({ 
   children, 
   variant = 'primary',
@@ -37,14 +40,14 @@ export function Button({
   className?: string
   [key: string]: any
 }) {
-  const variants = {
+  const variantes = {
     primary: 'bg-primary text-primary-foreground hover:bg-primary/90',
     secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/90',
     outline: 'border border-border text-foreground hover:bg-muted',
     ghost: 'text-foreground hover:bg-muted',
   }
   
-  const sizes = {
+  const tamanos = {
     sm: 'px-3 py-1.5 text-sm',
     md: 'px-4 py-2 text-sm',
     lg: 'px-6 py-3 text-base',
@@ -52,7 +55,7 @@ export function Button({
 
   return (
     <button 
-      className={`rounded-lg font-medium transition-colors ${variants[variant]} ${sizes[size]} ${className}`}
+      className={`rounded-lg font-medium transition-colors ${variantes[variant]} ${tamanos[size]} ${className}`}
       {...props}
     >
       {children}
@@ -60,11 +63,12 @@ export function Button({
   )
 }
 
+// Componente Estadística - Muestra una estadística con icono opcional
 export function Stat({ 
   label, 
   value, 
   change,
-  icon: Icon 
+  icon: Icon
 }: { 
   label: string
   value: string | number
@@ -91,6 +95,7 @@ export function Stat({
   )
 }
 
+// Componente Tabla - Tabla de datos con encabezados
 export function Table({ 
   headers, 
   rows 
@@ -128,6 +133,7 @@ export function Table({
   )
 }
 
+// Componente Modal - Ventana modal reutilizable
 export function Modal({
   isOpen,
   onClose,
@@ -154,6 +160,7 @@ export function Modal({
   )
 }
 
+// Componente Entrada - Campo de entrada reutilizable
 export function Input({
   label,
   type = 'text',

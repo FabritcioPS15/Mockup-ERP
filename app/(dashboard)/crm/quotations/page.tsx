@@ -1,9 +1,11 @@
 'use client'
 
-import { Card, Button, Badge, Table, Input } from '@/components/ui-primitives'
-import { Plus, Search, Download } from 'lucide-react'
+import { Badge, Button } from '@/components/ui-primitives'
+import { PageHeader, SearchFilter, StatsGrid, DataTable } from '@/components/page-layout'
+import { Download } from 'lucide-react'
 import { useState } from 'react'
 
+// Mapa de estados para traducción
 const statusMap: { [key: string]: string } = {
   'Pending': 'Pendiente',
   'Approved': 'Aprobada',
@@ -12,6 +14,7 @@ const statusMap: { [key: string]: string } = {
   'Expired': 'Expirada'
 }
 
+// Datos de ejemplo de cotizaciones
 const quotations = [
   { id: 'CT-001', client: 'Tech Solutions Inc.', amount: '$45,000', items: 12, status: 'Pending', validUntil: '15 Mar 2024', createdDate: '1 Mar 2024' },
   { id: 'CT-002', client: 'Global Industries', amount: '$32,500', items: 8, status: 'Approved', validUntil: '13 Mar 2024', createdDate: '27 Feb 2024' },
@@ -21,6 +24,7 @@ const quotations = [
   { id: 'CT-006', client: 'Digital Solutions', amount: '$22,300', items: 6, status: 'Expired', validUntil: '20 Feb 2024', createdDate: '6 Feb 2024' },
 ]
 
+// Filas de la tabla
 const tableRows = quotations.map(quote => [
   quote.id,
   quote.client,
@@ -36,68 +40,46 @@ const tableRows = quotations.map(quote => [
 export default function QuotationsPage() {
   const [searchTerm, setSearchTerm] = useState('')
 
+  const filterButtons = (
+    <>
+      <Button variant="outline" className="flex-1 sm:flex-none">Filtrar por Estado</Button>
+      <Button variant="outline" className="flex-1 sm:flex-none flex items-center justify-center gap-2">
+        <Download size={16} />
+        Exportar
+      </Button>
+    </>
+  )
+
+  const stats = [
+    { label: 'Total Cotizaciones', value: quotations.length },
+    { label: 'Valor Total', value: '$301,200' },
+    { label: 'Aprobadas', value: quotations.filter(q => q.status === 'Approved').length },
+    { label: 'Pendientes', value: quotations.filter(q => q.status === 'Pending').length },
+  ]
+
   return (
-    <div>
-      <div className="space-y-6">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div>
-            <h1 className="text-3xl font-bold text-foreground">Cotizaciones</h1>
-            <p className="text-muted-foreground mt-1">Crea y gestiona cotizaciones de clientes</p>
-          </div>
-          <Button variant="primary" size="lg" className="w-full sm:w-auto flex items-center justify-center gap-2">
-            <Plus size={18} />
-            Crear Cotización
-          </Button>
-        </div>
+    <div className="space-y-6">
+      <PageHeader
+        title="Cotizaciones"
+        description="Crea y gestiona cotizaciones de clientes"
+        buttonText="Crear Cotización"
+      />
 
-        {/* Search and Filters */}
-        <Card>
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Input
-              placeholder="Buscar cotizaciones..."
-              value={searchTerm}
-              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
-              className="flex-1 w-full"
-            />
-            <div className="flex gap-2 w-full sm:w-auto">
-              <Button variant="outline" className="flex-1 sm:flex-none">Filtrar por Estado</Button>
-              <Button variant="outline" className="flex-1 sm:flex-none flex items-center justify-center gap-2">
-                <Download size={16} />
-                Exportar
-              </Button>
-            </div>
-          </div>
-        </Card>
-
-        {/* Quotations Table */}
-        <Card>
-          <Table
-            headers={['ID Cotización', 'Cliente', 'Monto', 'Artículos', 'Estado', 'Válida Hasta', 'Creada']}
-            rows={tableRows}
-          />
-        </Card>
-
-        {/* Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <Card>
-            <p className="text-sm text-muted-foreground">Total Cotizaciones</p>
-            <p className="text-3xl font-bold text-foreground mt-2">{quotations.length}</p>
-          </Card>
-          <Card>
-            <p className="text-sm text-muted-foreground">Valor Total</p>
-            <p className="text-2xl font-bold text-foreground mt-2">$301,200</p>
-          </Card>
-          <Card>
-            <p className="text-sm text-muted-foreground">Aprobadas</p>
-            <p className="text-3xl font-bold text-foreground mt-2">{quotations.filter(q => q.status === 'Approved').length}</p>
-          </Card>
-          <Card>
-            <p className="text-sm text-muted-foreground">Pendientes</p>
-            <p className="text-3xl font-bold text-foreground mt-2">{quotations.filter(q => q.status === 'Pending').length}</p>
-          </Card>
-        </div>
+      <div className="bg-card rounded-xl border border-border/60 p-6 shadow-md hover:shadow-lg transition-all duration-300">
+        <SearchFilter
+          searchTerm={searchTerm}
+          onSearchChange={setSearchTerm}
+          placeholder="Buscar cotizaciones..."
+          filterButtons={filterButtons}
+        />
       </div>
+
+      <DataTable
+        headers={['ID Cotización', 'Cliente', 'Monto', 'Artículos', 'Estado', 'Válida Hasta', 'Creada']}
+        rows={tableRows}
+      />
+
+      <StatsGrid stats={stats} />
     </div>
   )
 }
