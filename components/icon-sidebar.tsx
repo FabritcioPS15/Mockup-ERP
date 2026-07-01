@@ -4,7 +4,15 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { navSections } from './navigation';
 
-export function IconSidebar() {
+import { LogOut, PanelRightOpen } from 'lucide-react';
+
+export function IconSidebar({ 
+  isDesktopCollapsed, 
+  onExpand 
+}: { 
+  isDesktopCollapsed?: boolean;
+  onExpand?: () => void;
+}) {
   const pathname = usePathname();
 
   // Find the active section based on the current pathname
@@ -49,6 +57,26 @@ export function IconSidebar() {
           </Link>
         );
       })}
+
+      <div className="mt-auto flex flex-col gap-2">
+        {isDesktopCollapsed && onExpand && (
+          <button 
+            onClick={onExpand}
+            className="hidden md:flex p-3 rounded-xl text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground transition-all duration-200 items-center justify-center relative group"
+          >
+            <PanelRightOpen size={24} strokeWidth={2} />
+            <div className="absolute left-full ml-4 px-2 py-1 bg-sidebar-accent text-sidebar-foreground text-xs rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-50 border border-sidebar-border">
+              Expandir Menú
+            </div>
+          </button>
+        )}
+        <button className="p-3 rounded-xl text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground transition-all duration-200 flex items-center justify-center relative group">
+          <LogOut size={24} strokeWidth={2} />
+          <div className="absolute left-full ml-4 px-2 py-1 bg-sidebar-accent text-sidebar-foreground text-xs rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all whitespace-nowrap z-50 border border-sidebar-border">
+            Cerrar Sesión
+          </div>
+        </button>
+      </div>
     </div>
   );
 }

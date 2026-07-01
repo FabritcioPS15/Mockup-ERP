@@ -35,6 +35,10 @@ import {
   CarFront,
   Map,
   MapPin,
+  Settings,
+  Shield,
+  Clock,
+  PanelLeftClose,
 } from 'lucide-react'
 
 export const navSections = [
@@ -123,9 +127,21 @@ export const navSections = [
       { href: '/rrhh/evaluations', label: 'Evaluaciones', icon: Award },
     ],
   },
+  {
+    id: 'administracion',
+    label: 'Administración',
+    icon: Settings,
+    href: '/admin/users',
+    items: [
+      { href: '/admin/users', label: 'Usuarios', icon: Users },
+      { href: '/admin/roles', label: 'Roles y Permisos', icon: Shield },
+      { href: '/admin/schedules', label: 'Horarios', icon: Clock },
+      { href: '/admin/settings', label: 'Configuración', icon: Settings },
+    ],
+  },
 ]
 
-export function Sidebar({ onClose }: { onClose?: () => void }) {
+export function Sidebar({ onClose, onCollapse }: { onClose?: () => void, onCollapse?: () => void }) {
   const pathname = usePathname()
 
   // Find the active section based on the current pathname
@@ -135,9 +151,21 @@ export function Sidebar({ onClose }: { onClose?: () => void }) {
 
   return (
     <aside className="h-screen w-60 shrink-0 bg-sidebar dark:bg-sidebar text-sidebar-foreground border-r border-sidebar-border flex flex-col relative z-10 shadow-xl md:shadow-none">
-      <div className="p-6 border-b border-sidebar-border h-[88px] flex flex-col justify-center">
-        <h1 className="text-xl font-bold text-white">Krea & Terra Hub</h1>
-        <p className="text-xs text-sidebar-foreground/70 mt-1">Plataforma de Negocios</p>
+      <div className="p-6 border-b border-sidebar-border h-[88px] flex flex-col justify-center relative">
+        <div className="flex justify-between items-center w-full">
+          <div>
+            <h1 className="text-xl font-bold text-white">Krea & Terra Hub</h1>
+            <p className="text-xs text-sidebar-foreground/70 mt-1">Plataforma de Negocios</p>
+          </div>
+          {onClose && (
+            <button 
+              onClick={() => onClose()}
+              className="md:hidden text-sidebar-foreground hover:text-white p-2 -mr-2 rounded-lg hover:bg-sidebar-accent/50 transition-colors"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="px-6 pt-4 pb-2 flex justify-between items-center">
@@ -175,9 +203,15 @@ export function Sidebar({ onClose }: { onClose?: () => void }) {
           <p className="text-xs font-medium text-sidebar-foreground">Usuario Admin</p>
           <p className="text-xs text-sidebar-foreground/70">admin@krea-terra.com</p>
         </div>
-        <button className="w-full flex items-center gap-3 px-4 py-2.5 text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground rounded-lg transition-colors font-medium text-sm">
-          <LogOut size={18} className="opacity-70" />
-          Cerrar Sesión
+        <button 
+          onClick={() => {
+            onCollapse?.();
+            onClose?.();
+          }}
+          className="w-full flex items-center gap-3 px-4 py-2.5 text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground rounded-lg transition-colors font-medium text-sm"
+        >
+          <PanelLeftClose size={18} className="opacity-70" />
+          Colapsar menú
         </button>
       </div>
     </aside>

@@ -9,6 +9,7 @@ const HeaderClient = dynamic(() => import('./header-client').then(mod => ({ defa
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const [isMobileOpen, setIsMobileOpen] = useState(false)
+  const [isDesktopCollapsed, setIsDesktopCollapsed] = useState(false)
 
   return (
     <div className="flex h-screen bg-background overflow-hidden relative">
@@ -21,12 +22,20 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
       )}
 
       {/* Sidebars */}
-      <div className={`fixed inset-y-0 left-0 z-50 flex transition-transform duration-300 ease-in-out md:translate-x-0 ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-        <IconSidebar />
-        <Sidebar onClose={() => setIsMobileOpen(false)} />
+      <div className={`fixed inset-y-0 left-0 z-50 flex transition-all duration-300 ease-in-out md:translate-x-0 ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+        <IconSidebar 
+          isDesktopCollapsed={isDesktopCollapsed} 
+          onExpand={() => setIsDesktopCollapsed(false)} 
+        />
+        <div className={`transition-all duration-300 ease-in-out overflow-hidden ${isDesktopCollapsed ? 'w-0' : 'w-60'}`}>
+          <Sidebar 
+            onClose={() => setIsMobileOpen(false)} 
+            onCollapse={() => setIsDesktopCollapsed(true)} 
+          />
+        </div>
       </div>
 
-      <div className="flex-1 flex flex-col min-w-0 md:ml-80">
+      <div className={`flex-1 flex flex-col min-w-0 transition-all duration-300 ${isDesktopCollapsed ? 'md:ml-20' : 'md:ml-80'}`}>
         <HeaderClient onMenuClick={() => setIsMobileOpen(true)} />
         <main className="flex-1 overflow-auto p-4 sm:p-6 md:p-8">
           {children}

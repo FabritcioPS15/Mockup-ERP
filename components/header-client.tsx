@@ -2,11 +2,16 @@
 
 import { Search, Moon, Sun, Bell, Settings, LogOut, ChevronDown, Menu, User } from 'lucide-react';
 import { useTheme } from './theme-provider';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export function HeaderClient({ onMenuClick }: { onMenuClick?: () => void }) {
   const { theme, toggleTheme } = useTheme();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <div className="h-16 bg-card border-b border-border flex items-center justify-between px-4 sm:px-6 sticky top-0 z-30 shadow-sm">
@@ -75,8 +80,8 @@ export function HeaderClient({ onMenuClick }: { onMenuClick?: () => void }) {
                   onClick={toggleTheme}
                   className="w-full px-4 py-2 text-left text-sm text-foreground hover:bg-muted flex items-center gap-3 transition-colors"
                 >
-                  {theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
-                  Cambiar a Modo {theme === 'light' ? 'Oscuro' : 'Claro'}
+                  {mounted && theme === 'light' ? <Moon size={16} /> : <Sun size={16} />}
+                  Cambiar a Modo {mounted && theme === 'light' ? 'Oscuro' : 'Claro'}
                 </button>
               </div>
               <div className="px-4 py-2 border-t border-border">
